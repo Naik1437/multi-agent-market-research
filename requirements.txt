@@ -1,0 +1,8 @@
+crewai
+crewai-tools
+pandas
+reportlab
+python-dotenv
+pytest
+tabulate
+requests
