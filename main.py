@@ -2,6 +2,8 @@ import argparse
 import json
 import os
 import time
+from monitoring.execution_tracker import execution_tracker
+
 from pathlib import Path
 
 from crew.crew import market_research_crew
