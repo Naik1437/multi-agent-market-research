@@ -5,7 +5,7 @@
         "status": "SUCCESS",
         "query": "Indian Smartphone Market Analysis 2026",
         "model": "gemini/gemini-3.1-flash-lite",
-        "execution_time_seconds": null,
+        "execution_time_seconds": 236,
         "report_generated": true,
         "markdown_report": "output/market_research_report.md",
         "pdf_report": "output/market_research_report.pdf"
@@ -56,8 +56,10 @@
         "pdf_validation": "PASS"
     },
     "notes": [
-        "Execution time has not yet been measured.",
-        "Only verified manager delegation is recorded.",
-        "Illustrative financial data is used for demonstration."
-    ]
+    "Execution duration of 236 seconds measured from execution log timestamps.",
+    "Researcher delegation observed in console output.",
+    "Analyst and Writer execution require additional verification.",
+    "Illustrative financial data is used for demonstration.",
+    "PDF generation and validation completed successfully."
+]
 }

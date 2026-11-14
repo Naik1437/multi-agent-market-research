@@ -1,27 +1,42 @@
+import pandas as pd
+
 from crew.financial_parser import analyze_financial_data
 
 
-print("\n========== FINANCIAL ANALYSIS ==========\n")
+def test_financial_parser_calculations(tmp_path):
+    """Verify financial calculations using sample CSV data."""
 
-result = analyze_financial_data(
-    "data/sample_financial_data.csv"
-)
+    csv_file = tmp_path / "financial_data.csv"
 
-if result["status"] == "success":
+    data = {
+        "Company": ["A", "B", "C"],
+        "Revenue": [100, 200, 300],
+        "Profit": [10, 20, 30],
+        "Market_Share": [10, 20, 30]
+    }
 
-    print("Total Companies:", result["total_companies"])
+    pd.DataFrame(data).to_csv(csv_file, index=False)
 
-    print("\nFINANCIAL STATISTICS:")
+    result = analyze_financial_data(str(csv_file))
 
-    for column, values in result["statistics"].items():
+    assert result["status"] == "success"
+    assert result["total_companies"] == 3
+    assert result["statistics"]["Revenue"]["mean"] == 200
+    assert result["statistics"]["Profit"]["mean"] == 20
+    assert result["statistics"]["Market_Share"]["mean"] == 20
 
-        print(f"\n{column}")
 
-        for metric, value in values.items():
-            print(f"{metric}: {value:.2f}")
+def test_financial_parser_missing_column(tmp_path):
+    """Verify that missing required columns are handled."""
 
-    print("\nMARKDOWN TABLE:")
-    print(result["markdown_table"])
+    csv_file = tmp_path / "invalid_data.csv"
 
-else:
-    print("Analysis failed:", result["message"])
+    pd.DataFrame({
+        "Company": ["A"],
+        "Revenue": [100]
+    }).to_csv(csv_file, index=False)
+
+    result = analyze_financial_data(str(csv_file))
+
+    assert result["status"] == "error"
+    assert "Missing required column" in result["message"]

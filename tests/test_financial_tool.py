@@ -1,9 +1,15 @@
 from crew.financial_parser import financial_analysis_tool
 
-print("\n========== CREWAI FINANCIAL TOOL TEST ==========\n")
 
-result = financial_analysis_tool.run(
-    file_path="data/sample_financial_data.csv"
-)
+def test_financial_analysis_tool():
+    """Verify that the CrewAI financial tool processes the CSV."""
 
-print(result)
+    result = financial_analysis_tool.run(
+        file_path="data/sample_financial_data.csv"
+    )
+
+    assert result
+    assert "success" in result.lower()
+    assert "Revenue" in result
+    assert "Profit" in result
+    assert "Market_Share" in result

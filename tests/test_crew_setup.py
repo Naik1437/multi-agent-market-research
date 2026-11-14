@@ -1,13 +1,26 @@
 from crew.crew import market_research_crew
+from crewai import Process
 
-print("\n========== CREW VERIFICATION ==========\n")
 
-print("Crew created successfully!")
+def test_crew_uses_hierarchical_process():
+    """Verify that the crew uses hierarchical execution."""
 
-print("Process:", market_research_crew.process)
+    assert market_research_crew.process == Process.hierarchical
 
-print("Number of agents:", len(market_research_crew.agents))
 
-print("Number of tasks:", len(market_research_crew.tasks))
+def test_crew_has_three_agents():
+    """Verify that all three specialist agents are configured."""
 
-print("\nAll crew components configured successfully!")
+    assert len(market_research_crew.agents) == 3
+
+
+def test_crew_has_three_tasks():
+    """Verify that all three tasks are configured."""
+
+    assert len(market_research_crew.tasks) == 3
+
+
+def test_crew_has_manager_llm():
+    """Verify that the hierarchical crew has a manager LLM."""
+
+    assert market_research_crew.manager_llm is not None
