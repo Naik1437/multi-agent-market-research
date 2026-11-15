@@ -43,12 +43,42 @@ def replace_financial_section(markdown, financial_result):
     return markdown.rstrip() + "\n\n" + replacement + "\n"
 
 
+def append_research_sources(markdown, task_outputs):
+    """Carry only URLs returned by the market research task into the report."""
+    url_pattern = re.compile(r"https?://[^\s<>\]\)\"']+", re.IGNORECASE)
+    source_urls = []
+    for task_output in task_outputs or []:
+        description = str(getattr(task_output, "description", "")).lower()
+        if "market topic" not in description or "source url" not in description:
+            continue
+        raw_output = str(getattr(task_output, "raw", ""))
+        for url in url_pattern.findall(raw_output):
+            url = url.rstrip(".,;:!?")
+            if url and url not in source_urls:
+                source_urls.append(url)
+
+    existing_urls = set(url_pattern.findall(markdown))
+    missing_urls = [url for url in source_urls if url not in existing_urls]
+    if not missing_urls:
+        return markdown
+
+    source_lines = "\n".join(f"* <{url}>" for url in missing_urls)
+    source_heading = re.compile(
+        r"(?im)^(?:#{1,3}\s*)?(?:\*\*)?Sources(?:\s*&\s*References)?(?::\*\*|:)?\s*$"
+    ).search(markdown)
+    if source_heading:
+        insertion = source_heading.end()
+        return markdown[:insertion] + "\n\n" + source_lines + markdown[insertion:]
+
+    return markdown.rstrip() + "\n\n## Sources\n\n" + source_lines + "\n"
+
+
 def report_paths(query):
     """Create stable, query-specific paths without replacing old reports."""
     slug = re.sub(r"[^a-z0-9]+", "-", query.lower()).strip("-")[:60]
     slug = slug or "market-research"
     slug = f"{slug}-{hashlib.sha256(query.encode('utf-8')).hexdigest()[:8]}"
-    return OUTPUT_DIR / f"{slug}.md", PDF_PATH
+    return OUTPUT_DIR / f"{slug}.md", OUTPUT_DIR / f"{slug}.pdf"
 
 
 def safe_error_message(error):
@@ -202,7 +232,11 @@ def run_market_research(query):
             )
 
             financial_result = analyze_financial_data(str(FINANCIAL_DATA_PATH))
-            report_markdown = replace_financial_section(result.raw, financial_result)
+            report_markdown = append_research_sources(
+                result.raw,
+                getattr(result, "tasks_output", []),
+            )
+            report_markdown = replace_financial_section(report_markdown, financial_result)
             report_path.write_text(
                 report_markdown,
                 encoding="utf-8"

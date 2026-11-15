@@ -27,6 +27,6 @@ def test_benchmark_record_matches_generated_artifact_paths(tmp_path, monkeypatch
     assert execution["query"] == "Tech Sector Q3 Analysis"
     assert execution["run_id"] == "test-run-id"
     assert execution["markdown_report"] == markdown_path.relative_to(main.BASE_DIR).as_posix()
-    assert execution["pdf_report"] == "output/market_report.pdf"
+    assert execution["pdf_report"] == pdf_path.relative_to(main.BASE_DIR).as_posix()
     assert execution["report_generated"] is True
     assert execution["pdf_generated"] is True

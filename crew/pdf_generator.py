@@ -82,6 +82,7 @@ def clean_inline_markdown(text):
         links.append(
             f'<link href="{safe_url}" color="#2563A6">'
             f'{safe_label}</link>'
+            f'<br/><font size="7" color="#667085">{safe_url}</font>'
         )
 
         return token

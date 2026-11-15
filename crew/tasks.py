@@ -44,12 +44,15 @@ writing_task = Task(
         "the market research findings and financial analysis. "
         "Include executive summary, industry overview, trends, "
         "competitor analysis, financial analysis, opportunities, "
-        "risks and conclusion. Clearly distinguish illustrative "
-        "financial data from verified market information."
+        "risks, conclusion and a Sources section containing the "
+        "actual source URLs provided by the Market Research Specialist. "
+        "Preserve those URLs exactly and do not invent sources. Clearly "
+        "distinguish illustrative financial data from verified market information."
     ),
     expected_output=(
         "A comprehensive, professionally structured market "
-        "research report in Markdown format."
+        "research report in Markdown format, including the actual source URLs "
+        "from the research task in a Sources section."
     ),
     context=[research_task, analysis_task]
 )

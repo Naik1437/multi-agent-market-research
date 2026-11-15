@@ -20,7 +20,15 @@ def analyze_financial_data(file_path: str) -> dict:
     try:
         candidate = Path(file_path)
         if not candidate.is_absolute():
-            candidate = BASE_DIR / candidate
+            project_candidate = BASE_DIR / candidate
+            # CrewAI may call the tool with only the CSV basename, even though
+            # the task names it relative to the project root as ``data/...``.
+            # Resolve such paths against the data directory when no project
+            # root file exists. This keeps behavior independent of process CWD.
+            if project_candidate.exists():
+                candidate = project_candidate
+            else:
+                candidate = DATA_DIR / candidate
         candidate = candidate.resolve(strict=True)
         if not candidate.is_relative_to(DATA_DIR):
             raise ValueError("CSV file must be located inside the project data directory.")

@@ -1,6 +1,15 @@
 from reportlab.pdfgen.canvas import Canvas
 
-from crew.pdf_generator import generate_pdf
+from crew.pdf_generator import clean_inline_markdown, generate_pdf
+
+
+def test_markdown_source_links_show_the_actual_url():
+    url = "https://example.com/market-source"
+
+    rendered = clean_inline_markdown(f"[Market source]({url})")
+
+    assert f'href="{url}"' in rendered
+    assert url in rendered
 
 
 def test_pdf_generation(tmp_path, monkeypatch):
@@ -29,11 +38,15 @@ def test_pdf_generation(tmp_path, monkeypatch):
     assert page_labels == [f"Page {number} of {len(page_labels)}" for number in range(1, len(page_labels) + 1)]
 
 
-def test_cli_pdf_path_matches_assessment():
-    from main import PDF_PATH, report_paths
+def test_cli_uses_query_specific_markdown_and_pdf_paths():
+    from main import report_paths
 
-    markdown_path, pdf_path = report_paths("Market Topic")
+    markdown_path, pdf_path = report_paths("Tech Sector Q3 Analysis")
+    other_markdown_path, other_pdf_path = report_paths("Renewable Energy Storage")
 
-    assert PDF_PATH.as_posix().endswith("output/market_report.pdf")
-    assert markdown_path.name.startswith("market-topic-")
-    assert pdf_path == PDF_PATH
+    assert markdown_path.name == "tech-sector-q3-analysis-9fbf91c0.md"
+    assert pdf_path.name == "tech-sector-q3-analysis-9fbf91c0.pdf"
+    assert pdf_path.parent == markdown_path.parent
+    assert other_pdf_path.name.endswith(".pdf")
+    assert other_pdf_path.stem == other_markdown_path.stem
+    assert other_pdf_path != pdf_path
