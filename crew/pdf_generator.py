@@ -7,6 +7,7 @@ from reportlab.lib.enums import TA_CENTER
 from reportlab.lib.pagesizes import A4
 from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
 from reportlab.lib.units import mm
+from reportlab.pdfgen.canvas import Canvas
 from reportlab.platypus import (
     SimpleDocTemplate,
     Paragraph,
@@ -24,7 +25,7 @@ from reportlab.platypus import (
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 INPUT_FILE = BASE_DIR / "output" / "market_research_report.md"
-OUTPUT_FILE = BASE_DIR / "output" / "market_research_report.pdf"
+OUTPUT_FILE = BASE_DIR / "output" / "market_report.pdf"
 
 
 # =====================================================
@@ -228,7 +229,7 @@ def create_styles():
 # PROFESSIONAL HEADER
 # =====================================================
 
-def create_header():
+def create_header(report_title):
 
     title = Paragraph(
         "MARKET RESEARCH REPORT",
@@ -242,7 +243,7 @@ def create_header():
     )
 
     subtitle = Paragraph(
-        "Indian Smartphone Market Analysis | 2026",
+        escape(report_title),
         ParagraphStyle(
             "BannerSubtitle",
             fontName="Helvetica",
@@ -295,16 +296,34 @@ def add_page_number(canvas, document):
     canvas.drawString(
         20 * mm,
         10 * mm,
-        "Indian Smartphone Market Research | 2026"
-    )
-
-    canvas.drawRightString(
-        width - 20 * mm,
-        10 * mm,
-        f"Page {document.page}"
+        getattr(document, "report_title", "Market Research Report")
     )
 
     canvas.restoreState()
+
+
+class NumberedCanvas(Canvas):
+    """Canvas that adds the final page count after all pages are built."""
+
+    def __init__(self, *args, **kwargs):
+        self._saved_page_states = []
+        super().__init__(*args, **kwargs)
+
+    def showPage(self):
+        self._saved_page_states.append(dict(self.__dict__))
+        self._startPage()
+
+    def save(self):
+        total_pages = len(self._saved_page_states)
+        for page_state in self._saved_page_states:
+            self.__dict__.update(page_state)
+            self.drawRightString(
+                A4[0] - 20 * mm,
+                10 * mm,
+                f"Page {self._pageNumber} of {total_pages}"
+            )
+            Canvas.showPage(self)
+        Canvas.save(self)
 
 
 # =====================================================
@@ -579,18 +598,30 @@ def convert_markdown_to_story(markdown, styles):
 # MAIN PDF GENERATOR
 # =====================================================
 
-def generate_pdf():
+def extract_report_title(markdown, fallback="Market Research Report"):
+    """Use the report's first Markdown H1 as its human-readable title."""
+    for line in markdown.splitlines():
+        match = re.match(r"^#\s+(.+?)\s*#*\s*$", line.strip())
+        if match:
+            return normalize_text(match.group(1))
+    return fallback
+
+
+def generate_pdf(input_file=INPUT_FILE, output_file=OUTPUT_FILE, report_title=None):
 
     print("\nStarting PDF generation...")
 
     # Check input file.
-    if not INPUT_FILE.exists():
+    input_file = Path(input_file)
+    output_file = Path(output_file)
+
+    if not input_file.exists():
 
         raise FileNotFoundError(
-            f"Markdown report not found: {INPUT_FILE}"
+            f"Markdown report not found: {input_file}"
         )
 
-    markdown = INPUT_FILE.read_text(
+    markdown = input_file.read_text(
         encoding="utf-8"
     )
 
@@ -600,7 +631,8 @@ def generate_pdf():
             "Markdown report is empty."
         )
 
-    OUTPUT_FILE.parent.mkdir(
+    report_title = report_title or extract_report_title(markdown)
+    output_file.parent.mkdir(
         parents=True,
         exist_ok=True
     )
@@ -608,19 +640,20 @@ def generate_pdf():
     styles = create_styles()
 
     document = SimpleDocTemplate(
-        str(OUTPUT_FILE),
+        str(output_file),
         pagesize=A4,
         rightMargin=20 * mm,
         leftMargin=20 * mm,
         topMargin=18 * mm,
         bottomMargin=23 * mm,
-        title="Indian Smartphone Market Research Report 2026",
+        title=report_title,
         author="Multi-Agent Market Research System",
-        subject="Indian Smartphone Market Analysis"
+        subject=report_title
     )
+    document.report_title = report_title
 
     story = [
-        create_header(),
+        create_header(report_title),
         Spacer(1, 12)
     ]
 
@@ -641,23 +674,24 @@ def generate_pdf():
     document.build(
         story,
         onFirstPage=add_page_number,
-        onLaterPages=add_page_number
+        onLaterPages=add_page_number,
+        canvasmaker=NumberedCanvas
     )
 
     # Validate generated PDF.
-    if not OUTPUT_FILE.exists():
+    if not output_file.exists():
 
         raise RuntimeError(
             "PDF file was not created."
         )
 
-    if OUTPUT_FILE.stat().st_size == 0:
+    if output_file.stat().st_size == 0:
 
         raise RuntimeError(
             "Generated PDF is empty."
         )
 
-    with open(OUTPUT_FILE, "rb") as pdf_file:
+    with open(output_file, "rb") as pdf_file:
 
         if not pdf_file.read(5).startswith(b"%PDF-"):
 
@@ -669,9 +703,9 @@ def generate_pdf():
     print("       PDF GENERATED SUCCESSFULLY")
     print("==========================================")
 
-    print(f"Input file : {INPUT_FILE}")
-    print(f"Output file: {OUTPUT_FILE}")
-    print(f"File size  : {OUTPUT_FILE.stat().st_size:,} bytes")
+    print(f"Input file : {input_file}")
+    print(f"Output file: {output_file}")
+    print(f"File size  : {output_file.stat().st_size:,} bytes")
 
     print("PDF validation: PASS")
 

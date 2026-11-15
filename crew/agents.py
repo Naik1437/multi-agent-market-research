@@ -1,4 +1,4 @@
-from crew.tools import market_web_search, website_scraper
+from crew.tools import market_search_and_scrape, market_web_search, website_scraper
 
 from crewai import Agent
 from crew.financial_parser import financial_analysis_tool
@@ -28,9 +28,10 @@ researcher = Agent(
 
     llm=llm,
     tools=[
-    market_web_search,
-    website_scraper
-],
+        market_web_search,
+        market_search_and_scrape,
+        website_scraper
+    ],
 
     verbose=True,
 

@@ -41,7 +41,7 @@ market_research_crew = Crew(
     verbose=True,
 
     # Save execution logs
-    output_log_file="benchmarks/execution.log"
+    output_log_file="benchmarks/execution.log.txt"
 )
 
 

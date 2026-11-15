@@ -7,7 +7,8 @@ research_task = Task(
         "Research the following market topic: {query}. "
         "Identify industry trends, major companies, competitors, "
         "market opportunities and challenges. "
-        "Use web search and website scraping tools. "
+        "Use Market Search and Page Scraper to search with Tavily and "
+        "read the actual content of relevant result pages. "
         "Include relevant source URLs and avoid inventing facts."
     ),
     expected_output=(
@@ -23,13 +24,16 @@ analysis_task = Task(
         "Delegate this task to the Financial Data Analyst. "
         "Analyse data/sample_financial_data.csv using the "
         "Financial Data Analysis Tool. Calculate revenue, "
-        "profit and market-share statistics. Explain findings."
+        "profit and market-share statistics. Compare the sample "
+        "metrics with the market findings from the research task where "
+        "company names overlap. Clearly label the CSV values as illustrative."
     ),
     expected_output=(
         "Financial statistics containing average, minimum, "
         "maximum and standard deviation for each numeric column, "
         "a Markdown table and business insights."
-    )
+    ),
+    context=[research_task]
 )
 
 

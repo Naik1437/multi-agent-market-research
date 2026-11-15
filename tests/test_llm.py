@@ -1,14 +1,22 @@
-from config.llm_config import llm
+import os
 
-print("Testing Gemini connection...")
+import pytest
 
-response = llm.call(
-    messages=[
-        {
-            "role": "user",
-            "content": "Reply with: Gemini connection successful!"
-        }
-    ]
+
+@pytest.mark.skipif(
+    os.getenv("RUN_LLM_INTEGRATION") != "1",
+    reason="Set RUN_LLM_INTEGRATION=1 to run the live Gemini integration check."
 )
+def test_gemini_connection():
+    from config.llm_config import llm
 
-print("Response:", response)
+    response = llm.call(
+        messages=[
+            {
+                "role": "user",
+                "content": "Reply with: Gemini connection successful!"
+            }
+        ]
+    )
+
+    assert response

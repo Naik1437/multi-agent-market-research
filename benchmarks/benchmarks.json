@@ -5,41 +5,104 @@
         "status": "SUCCESS",
         "query": "Tech Sector Q3 Analysis",
         "model": "gemini/gemini-3.1-flash-lite",
-        "execution_time_seconds": 188.32,
+        "execution_time_seconds": 86.85,
         "report_generated": true,
-        "markdown_report": "output\\market_research_report.md",
-        "pdf_report": "output\\market_research_report.pdf",
+        "markdown_report": "output/tech-sector-q3-analysis-9fbf91c0.md",
+        "pdf_report": "output/market_report.pdf",
         "crew_event_status": "SUCCESS",
-        "pdf_generated": true
+        "pdf_generated": true,
+        "run_id": "9437cfd6-4695-4fb3-836c-e4936d89ee97",
+        "started_at_utc": "2026-11-15T09:41:33.719030+00:00",
+        "pdf_regenerated_from_markdown": "output/tech-sector-q3-analysis-9fbf91c0.md",
+        "pdf_regenerated_at_utc": "2026-11-15T10:11:47.824Z",
+        "pdf_regeneration_run_id": "9437cfd6-4695-4fb3-836c-e4936d89ee97"
     },
     "manager": {
         "type": "CrewAI Hierarchical Manager",
         "delegation_enabled": true,
         "verified_routing_history": [
             {
-                "manager": "Manager",
-                "delegated_to": "Researcher",
-                "status": "Observed in execution logs"
+                "task": "Delegate this task to the Market Research Specialist. Research the following market topic: Tech Sector Q3 Analysis. Identify industry trends, major companies, competitors, market opportunities and challenges. Use Market Search and Page Scraper to search with Tavily and read the actual content of relevant result pages. Include relevant source URLs and avoid inventing facts.",
+                "manager": "Crew Manager",
+                "delegated_to": "Senior Market Research Specialist",
+                "status": "Specialist execution observed in matching task output"
+            },
+            {
+                "task": "Delegate this task to the Financial Data Analyst. Analyse data/sample_financial_data.csv using the Financial Data Analysis Tool. Calculate revenue, profit and market-share statistics. Compare the sample metrics with the market findings from the research task where company names overlap. Clearly label the CSV values as illustrative.",
+                "manager": "Crew Manager",
+                "delegated_to": "Senior Financial Data Analyst",
+                "status": "Specialist execution observed in matching task output"
+            },
+            {
+                "task": "Delegate this task to the Professional Report Writer. Prepare a professional market research report using the market research findings and financial analysis. Include executive summary, industry overview, trends, competitor analysis, financial analysis, opportunities, risks and conclusion. Clearly distinguish illustrative financial data from verified market information.",
+                "manager": "Crew Manager",
+                "delegated_to": "Professional Market Research Report Writer",
+                "status": "Specialist execution observed in matching task output"
             }
         ],
         "observed_task_assignments": [
             {
                 "event": "task_assignment_observed",
-                "task": "Delegate this task to the Market Research Specialist. Research the following market topic: Tech Sector Q3 Analysis. Identify industry trends, major companies, competitors, market opportunities and challenges. Use web search and website scraping tools. Include relevant source URLs and avoid inventing facts.",
-                "agent": "Unknown",
-                "agent_id": null
+                "task": "Delegate this task to the Market Research Specialist. Research the following market topic: Tech Sector Q3 Analysis. Identify industry trends, major companies, competitors, market opportunities and challenges. Use Market Search and Page Scraper to search with Tavily and read the actual content of relevant result pages. Include relevant source URLs and avoid inventing facts.",
+                "agent": "Crew Manager",
+                "agent_id": "312b6b97-ca31-4ee0-95ad-77927f1ce313",
+                "task_id": "3b2ab241-fdd3-4c70-9b05-756926fb4f1f",
+                "manager": "Crew Manager",
+                "delegated_to": "Senior Market Research Specialist",
+                "specialist_execution_observed": true,
+                "specialist_task_id": "9b812884-90c0-4ad4-86a3-0df4abec0cc5"
+            },
+            {
+                "event": "agent_execution_completed",
+                "agent": "Senior Market Research Specialist",
+                "task_id": "9b812884-90c0-4ad4-86a3-0df4abec0cc5"
+            },
+            {
+                "event": "agent_execution_completed",
+                "agent": "Crew Manager",
+                "task_id": "3b2ab241-fdd3-4c70-9b05-756926fb4f1f"
             },
             {
                 "event": "task_assignment_observed",
-                "task": "Delegate this task to the Financial Data Analyst. Analyse data/sample_financial_data.csv using the Financial Data Analysis Tool. Calculate revenue, profit and market-share statistics. Explain findings.",
-                "agent": "Unknown",
-                "agent_id": null
+                "task": "Delegate this task to the Financial Data Analyst. Analyse data/sample_financial_data.csv using the Financial Data Analysis Tool. Calculate revenue, profit and market-share statistics. Compare the sample metrics with the market findings from the research task where company names overlap. Clearly label the CSV values as illustrative.",
+                "agent": "Crew Manager",
+                "agent_id": "312b6b97-ca31-4ee0-95ad-77927f1ce313",
+                "task_id": "312215d0-afd9-4559-906a-6b675ee02bb0",
+                "manager": "Crew Manager",
+                "delegated_to": "Senior Financial Data Analyst",
+                "specialist_execution_observed": true,
+                "specialist_task_id": "30e16b95-0230-40b2-a008-6b6006c40461"
+            },
+            {
+                "event": "agent_execution_completed",
+                "agent": "Senior Financial Data Analyst",
+                "task_id": "30e16b95-0230-40b2-a008-6b6006c40461"
+            },
+            {
+                "event": "agent_execution_completed",
+                "agent": "Crew Manager",
+                "task_id": "312215d0-afd9-4559-906a-6b675ee02bb0"
             },
             {
                 "event": "task_assignment_observed",
                 "task": "Delegate this task to the Professional Report Writer. Prepare a professional market research report using the market research findings and financial analysis. Include executive summary, industry overview, trends, competitor analysis, financial analysis, opportunities, risks and conclusion. Clearly distinguish illustrative financial data from verified market information.",
-                "agent": "Unknown",
-                "agent_id": null
+                "agent": "Crew Manager",
+                "agent_id": "312b6b97-ca31-4ee0-95ad-77927f1ce313",
+                "task_id": "8ed35bdf-4b7e-4d24-b9b9-33cbb65caeed",
+                "manager": "Crew Manager",
+                "delegated_to": "Professional Market Research Report Writer",
+                "specialist_execution_observed": true,
+                "specialist_task_id": "69df41a8-6365-43ff-ba13-3bb444954ed0"
+            },
+            {
+                "event": "agent_execution_completed",
+                "agent": "Professional Market Research Report Writer",
+                "task_id": "69df41a8-6365-43ff-ba13-3bb444954ed0"
+            },
+            {
+                "event": "agent_execution_completed",
+                "agent": "Crew Manager",
+                "task_id": "8ed35bdf-4b7e-4d24-b9b9-33cbb65caeed"
             }
         ]
     },
@@ -54,13 +117,13 @@
             "name": "Analyst",
             "role": "Financial Data Analyst",
             "configured": true,
-            "execution_verified": false
+            "execution_verified": true
         },
         {
             "name": "Writer",
             "role": "Market Research Report Writer",
             "configured": true,
-            "execution_verified": false
+            "execution_verified": true
         }
     ],
     "tools": [
@@ -75,82 +138,81 @@
             "Profit",
             "Market_Share"
         ],
-        "pdf_validation": "PASS"
+        "pdf_validation": "PASS",
+        "financial_data_source": "data/sample_financial_data.csv",
+        "financial_data_label": "Illustrative sample data"
     },
     "notes": [
-        "Execution duration of 236 seconds measured from execution log timestamps.",
-        "Researcher delegation observed in console output.",
-        "Analyst and Writer execution require additional verification.",
         "Illustrative financial data is used for demonstration.",
         "PDF generation and validation completed successfully."
     ],
     "agent_execution_metrics": [
         {
-            "agent": "Unknown",
-            "agent_id": null,
-            "task_id": null,
-            "task_name": null,
-            "duration_seconds": 99.13,
+            "agent": "Senior Market Research Specialist",
+            "agent_id": "5acc59fc-663e-4e31-b6d5-2255d8e04fc1",
+            "task_id": "9b812884-90c0-4ad4-86a3-0df4abec0cc5",
+            "task_name": "Delegate this task to the Market Research Specialist. Research the following market topic: Tech Sector Q3 Analysis. Identify industry trends, major companies, competitors, market opportunities and challenges. Use Market Search and Page Scraper to search with Tavily and read the actual content of relevant result pages. Include relevant source URLs and avoid inventing facts.",
+            "duration_seconds": 13.69,
             "status": "COMPLETED"
         },
         {
-            "agent": "Unknown",
-            "agent_id": null,
-            "task_id": null,
-            "task_name": null,
-            "duration_seconds": 104.47,
+            "agent": "Crew Manager",
+            "agent_id": "312b6b97-ca31-4ee0-95ad-77927f1ce313",
+            "task_id": "3b2ab241-fdd3-4c70-9b05-756926fb4f1f",
+            "task_name": "Delegate this task to the Market Research Specialist. Research the following market topic: Tech Sector Q3 Analysis. Identify industry trends, major companies, competitors, market opportunities and challenges. Use Market Search and Page Scraper to search with Tavily and read the actual content of relevant result pages. Include relevant source URLs and avoid inventing facts.",
+            "duration_seconds": 20.14,
             "status": "COMPLETED"
         },
         {
-            "agent": "Unknown",
-            "agent_id": null,
-            "task_id": null,
-            "task_name": null,
-            "duration_seconds": 4.73,
+            "agent": "Senior Financial Data Analyst",
+            "agent_id": "03614cf4-6306-403f-8226-aa2ba5ac5137",
+            "task_id": "30e16b95-0230-40b2-a008-6b6006c40461",
+            "task_name": "Delegate this task to the Financial Data Analyst. Analyse data/sample_financial_data.csv using the Financial Data Analysis Tool. Calculate revenue, profit and market-share statistics. Compare the sample metrics with the market findings from the research task where company names overlap. Clearly label the CSV values as illustrative.",
+            "duration_seconds": 4.78,
             "status": "COMPLETED"
         },
         {
-            "agent": "Unknown",
-            "agent_id": null,
-            "task_id": null,
-            "task_name": null,
-            "duration_seconds": 52.49,
+            "agent": "Crew Manager",
+            "agent_id": "312b6b97-ca31-4ee0-95ad-77927f1ce313",
+            "task_id": "312215d0-afd9-4559-906a-6b675ee02bb0",
+            "task_name": "Delegate this task to the Financial Data Analyst. Analyse data/sample_financial_data.csv using the Financial Data Analysis Tool. Calculate revenue, profit and market-share statistics. Compare the sample metrics with the market findings from the research task where company names overlap. Clearly label the CSV values as illustrative.",
+            "duration_seconds": 8.99,
             "status": "COMPLETED"
         },
         {
-            "agent": "Unknown",
-            "agent_id": null,
-            "task_id": null,
-            "task_name": null,
-            "duration_seconds": 16.71,
+            "agent": "Professional Market Research Report Writer",
+            "agent_id": "61f228fa-15e9-4aa5-9ac9-7b4a52356d3f",
+            "task_id": "69df41a8-6365-43ff-ba13-3bb444954ed0",
+            "task_name": "Delegate this task to the Professional Report Writer. Prepare a professional market research report using the market research findings and financial analysis. Include executive summary, industry overview, trends, competitor analysis, financial analysis, opportunities, risks and conclusion. Clearly distinguish illustrative financial data from verified market information.",
+            "duration_seconds": 4.02,
             "status": "COMPLETED"
         },
         {
-            "agent": "Unknown",
-            "agent_id": null,
-            "task_id": null,
-            "task_name": null,
-            "duration_seconds": 30.98,
+            "agent": "Crew Manager",
+            "agent_id": "312b6b97-ca31-4ee0-95ad-77927f1ce313",
+            "task_id": "8ed35bdf-4b7e-4d24-b9b9-33cbb65caeed",
+            "task_name": "Delegate this task to the Professional Report Writer. Prepare a professional market research report using the market research findings and financial analysis. Include executive summary, industry overview, trends, competitor analysis, financial analysis, opportunities, risks and conclusion. Clearly distinguish illustrative financial data from verified market information.",
+            "duration_seconds": 11.18,
             "status": "COMPLETED"
         }
     ],
     "task_execution_metrics": [
         {
-            "task": "Delegate this task to the Market Research Specialist. Research the following market topic: Tech Sector Q3 Analysis. Identify industry trends, major companies, competitors, market opportunities and challenges. Use web search and website scraping tools. Include relevant source URLs and avoid inventing facts.",
-            "agent": "Unknown",
-            "duration_seconds": 104.5,
+            "task": "Delegate this task to the Market Research Specialist. Research the following market topic: Tech Sector Q3 Analysis. Identify industry trends, major companies, competitors, market opportunities and challenges. Use Market Search and Page Scraper to search with Tavily and read the actual content of relevant result pages. Include relevant source URLs and avoid inventing facts.",
+            "agent": "Senior Market Research Specialist",
+            "duration_seconds": 20.18,
             "status": "COMPLETED"
         },
         {
-            "task": "Delegate this task to the Financial Data Analyst. Analyse data/sample_financial_data.csv using the Financial Data Analysis Tool. Calculate revenue, profit and market-share statistics. Explain findings.",
-            "agent": "Unknown",
-            "duration_seconds": 52.5,
+            "task": "Delegate this task to the Financial Data Analyst. Analyse data/sample_financial_data.csv using the Financial Data Analysis Tool. Calculate revenue, profit and market-share statistics. Compare the sample metrics with the market findings from the research task where company names overlap. Clearly label the CSV values as illustrative.",
+            "agent": "Senior Financial Data Analyst",
+            "duration_seconds": 9,
             "status": "COMPLETED"
         },
         {
             "task": "Delegate this task to the Professional Report Writer. Prepare a professional market research report using the market research findings and financial analysis. Include executive summary, industry overview, trends, competitor analysis, financial analysis, opportunities, risks and conclusion. Clearly distinguish illustrative financial data from verified market information.",
-            "agent": "Unknown",
-            "duration_seconds": 31.0,
+            "agent": "Professional Market Research Report Writer",
+            "duration_seconds": 11.19,
             "status": "COMPLETED"
         }
     ]

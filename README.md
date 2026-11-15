@@ -96,7 +96,7 @@ The project uses CrewAI's hierarchical process.
 | CrewAI | Multi-agent orchestration |
 | Google Gemini | Large Language Model |
 | Pandas | Financial data processing |
-| DuckDuckGo Search (DDGS) | Web search |
+| Tavily Search API | Search result discovery and source URLs |
 | BeautifulSoup | Website content extraction |
 | Requests | HTTP requests |
 | ReportLab | PDF generation |
@@ -132,8 +132,8 @@ multi-agent-market-research/
 │   └── execution_tracker.py
 │
 ├── output/
-│   ├── market_research_report.md
-│   └── market_research_report.pdf
+│   ├── <query-slug>-<query-hash>.md
+│   └── market_report.pdf
 │
 ├── tests/
 │   ├── test_agents.py
@@ -207,10 +207,11 @@ Windows PowerShell:
 Copy-Item .env.example .env
 ```
 
-Add your Gemini API key:
+Set the required search and model API keys:
 
 ```env
 GOOGLE_API_KEY=your_google_api_key_here
+TAVILY_API_KEY=your_tavily_api_key_here
 MODEL=gemini/gemini-3.1-flash-lite
 ```
 
@@ -223,7 +224,7 @@ Replace the placeholder with your own API key.
 Execute the following command from the project root:
 
 ```bash
-python main.py --query "Indian Smartphone Market Analysis 2026"
+python main.py --query "Tech Sector Q3 Analysis"
 ```
 
 The application will:
@@ -238,11 +239,18 @@ The application will:
 
 ### Generated Outputs
 
+Each run uses Tavily search results and scrapes up to three public result pages. Configure `TAVILY_API_KEY` and `GOOGLE_API_KEY` in `.env`; the application stops before starting the crew if Tavily is not configured. The scraper connects directly to a validated public IP, verifies HTTPS certificates against the original hostname, revalidates redirects, and limits page downloads to 2 MB.
+
+Each run creates a query-specific Markdown file and writes the PDF to the assessment-required path `output/market_report.pdf`. The Markdown query is converted to a lowercase filename slug and followed by an 8-character SHA-256 suffix to prevent filename collisions.
+
+For example, running `python main.py --query "Tech Sector Q3 Analysis"` produces:
+
 ```text
-output/
-├── market_research_report.md
-└── market_research_report.pdf
+output/tech-sector-q3-analysis-<query-hash>.md
+output/market_report.pdf
 ```
+
+Run the command from the project root so relative CrewAI log paths resolve to the project folders. Each run appends its CrewAI trace to `benchmarks/execution.log.txt` and updates `benchmarks/benchmarks.json` with the query, run ID, report paths, status, and current run metrics. The prior sample artifacts are retained; new runs use the paths shown above.
 
 ## 8. Financial Data Analysis
 
@@ -323,13 +331,7 @@ Alternatively:
 pytest -q tests/
 ```
 
-Latest recorded test result:
-
-```text
-15 passed, 10 warnings
-```
-
-The warnings are CrewAI deprecation warnings and did not cause test failures.
+The normal test suite does not make live LLM requests. To run the optional Gemini integration check explicitly, set `RUN_LLM_INTEGRATION=1` before running pytest. Search and scraping tests use mocked API and page responses.
 
 ## 12. Security
 
